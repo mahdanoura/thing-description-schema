@@ -39,9 +39,15 @@ prefixes:
   xsd:
     prefix_prefix: xsd
     prefix_reference: http://www.w3.org/2001/XMLSchema#
-  dct: http://purl.org/dc/terms/
-  htv: http://www.w3.org/2011/http#
-  tm: https://www.w3.org/2019/wot/tm#
+  dct:
+    prefix_prefix: dct
+    prefix_reference: http://purl.org/dc/terms/
+  htv:
+    prefix_prefix: htv
+    prefix_reference: http://www.w3.org/2011/http#
+  tm:
+    prefix_prefix: tm
+    prefix_reference: https://www.w3.org/2019/wot/tm#
 default_prefix: td
 default_range: string
 
@@ -49,12 +55,6 @@ imports:
   - linkml:types
 
 types:
-  langStringType:
-    name: langStringType
-    description: an rdf langstring or a string without the language tag
-    uri: rdf:langString
-    base: string
-    pattern: ?:[a-zA-Z]+|"[^"]+"@[a-zA-Z]+(?:-[a-zA-Z]+)*)
   anyUri:
     name: anyUri
     description: a complete URI
