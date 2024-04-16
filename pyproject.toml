@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "thing_description_schema"
 version = "0.0.0.post1.dev0+dfeaf46"
-description = "Thing Description Standard"
+description = "Thing Description Information Model as a LinkML schema"
 authors = ["Mahda Noura <mahdanoura@gmail.com>"]
 license = "MIT"
 readme = "README.md"
