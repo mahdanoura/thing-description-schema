@@ -1,21 +1,29 @@
 ---
-id: https://w3id.org/mahda/thing-description-schema
+id: https://www.w3.org/2019/wot/td
 name: thing-description-schema
 title: thing-description-schema
 description: |-
-  Thing Description Standard
+  LinkML schema for modelling the Web of Things Thing Description information model
 license: MIT
 see_also:
-  - https://mahda.github.io/thing-description-schema
+  - https://www.w3.org/TR/wot-thing-description11/
 
 prefixes:
-  thing_description_schema: https://w3id.org/mahda/thing-description-schema/
-  linkml: https://w3id.org/linkml/
-  biolink: https://w3id.org/biolink/
-  schema: http://schema.org/
-  PATO: http://purl.obolibrary.org/obo/PATO_
-  example: https://example.org/
-default_prefix: thing_description_schema
+  linkml:
+    prefix_prefix: linkml
+    prefix_reference: https://w3id.org/linkml/
+  td:
+    prefix_prefix: td
+    prefix_reference: https://www.w3.org/2019/wot/td#
+  jsonschema: https://www.w3.org/2019/wot/json-schema#
+  wotsec: https://www.w3.org/2019/wot/security#
+  hctl: https://www.w3.org/2019/wot/hypermedia#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  dct: http://purl.org/dc/terms/
+  htv: http://www.w3.org/2011/http#
+  tm: https://www.w3.org/2019/wot/tm#
+default_prefix: td
 default_range: string
 
 imports:
@@ -23,74 +31,300 @@ imports:
 
 classes:
 
-  NamedThing:
-    description: >-
-      A generic grouping for any identifiable entity
+  VersionInfo:
+    description:
+
+    attributes:
+      instance:
+        required: true
+      model:
+
+  MultiLanguage:
+    attributes:
+      key:
+        identifier: true
+        pattern: "^(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$"
+
+  Link:
+    attributes:
+      href:
+        required: true
+        range: uri
+      type:
+      rel:
+      anchor:
+        range: uri
+      sizes:
+      hreflang:
+        pattern: "^(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$"
+
+  ExpectedResponse:
+    attributes:
+      contentType:
+        required: true
+
+  AdditionalExpectedResponse:
+    is_a: ExpectedResponse
+    attributes:
+      success:
+        range: boolean
+      schema:
+
+  Form:
+    attributes:
+      href:
+        required: true
+        range: uri
+      contentType:
+      contentCoding:
+      security:
+      scopes:
+      response:
+        range: ExpectedResponse
+      additionalResponses:
+        range: AdditionalExpectedResponse
+        multivalued: true
+      subprotocol:
+      op:
+        multivalued: true
+        range: Operations
+
+  SecurityScheme:
     slots:
-      - id
-      - name
-      - description
-    class_uri: schema:Thing
+      - "@type"
+      - descriptions
+    attributes:
+      description:
+      proxy:
+        range: anyUriType
+      scheme:
+        required: true
+        range: SecurityMechanism
+
+  DataSchema:
+
+  InteractionAffordance:
+    attributes:
+      key:
+        identifier: true
+      title:
+      description:
+      uriVariables:
+        multivalued: true
+        range: DataSchema
+      forms:
+        required:
+        multivalued: true
+        range: Form
+    slots:
+      - titles
+      - descriptions
+
+  PropertyAffordance:
+    is_a: InteractionAffordance
+    mixins: DataSchema
+    attributes:
+      observable:
+        range: boolean
+
+  ActionAffordance:
+    is_a: InteractionAffordance
+    attributes:
+      safe:
+        range: boolean
+      idempotent:
+        range: boolean
+      input:
+        range: DataSchema
+      output:
+        range: DataSchema
+
+  EventAffordance:
+    is_a: InteractionAffordance
+    attributes:
+      data:
+        range: DataSchema
+      subscription:
+        range: DataSchema
+      cancellation:
+        range: DataSchema
 
   Thing:
-    is_a: NamedThing
     description: >-
-      Represents a Thing
-    slots:
-      - primary_email
-      - birth_date
-      - age_in_years
-      - vital_status
-    slot_usage:
-      primary_email:
-        pattern: "^\\S+@[\\S+\\.]+\\S+"
-
-  ThingCollection:
-    tree_root: true
-    description: >-
-      A holder for Thing objects
+      An abstraction of a physical or a virtual entity whose metadata and interfaces are described by a WoT Thing
+      Description, whereas a virtual entity is the composition of one or more Things.
     attributes:
-      entries:
-        range: Thing
+      title:
+        description: >-
+          Provides a human-readable title (e.g., display a text for UI representation) based on a default language.
+        range: langStringType
+        required:
+      security:
+        required:
+        multivalued: true
+        any_of:
+          - range: string
+          - range: SecurityMechanism
+      description:
+        description:
+          Provides a human-readable title (e.g., display a text for UI representation) based on a default language.
+        range: langStringType
+      profile:
+        multivalued: true
+        range: anyUriType
+      created:
+        range: datetime
+      modified:
+        range: datetime
+      support:
+      base:
+        range: anyUriType
+      version:
+        range: VersionInfo
+      forms:
+        multivalued: true
+        range: Form
+      links:
+        multivalued: true
+        range: Link
+      securityDefinitions:
+        required:
+        multivalued: true
+      schemaDefinitions:
+        multivalued: true
+        range: DataSchema
+      uriVariables:
+        multivalued: true
+        range: DataSchema
+      properties:
         multivalued: true
         inlined: true
+        range: PropertyAffordance
+      actions:
+        multivalued: true
+        inlined: true
+        range: ActionAffordance
+      events:
+        multivalued: true
+        inlined: true
+        range: EventAffordance
+    slots:
+      - id
+      - titles
+      - descriptions
+      - "@type"
+
 
 slots:
   id:
     identifier: true
-    slot_uri: schema:identifier
-    range: uriorcurie
-    description: A unique identifier for a thing
-  name:
-    slot_uri: schema:name
-    description: A human-readable name for a thing
-  description:
-    slot_uri: schema:description
-    description: A human-readable description for a thing
-  primary_email:
-    slot_uri: schema:email
-    description: The main email address of a person
-  birth_date:
-    slot_uri: schema:birthDate
-    range: date
-    description: Date on which a person is born
-  age_in_years:
-    range: integer
-    description: Number of years since birth
-  vital_status:
-    range: PersonStatus
-    description: living or dead status
+    range: uri
+  titles:
+    multivalued: true
+    range: MultiLanguage
+    inlined: true
+  descriptions:
+    multivalued: true
+    range: MultiLanguage
+    inlined: true
+  "@type":
+    multivalued: true
+
+
+types:
+  langStringType:
+    uri: rdf:langString
+    base: string
+    pattern: ?:[a-zA-Z]+|"[^"]+"@[a-zA-Z]+(?:-[a-zA-Z]+)*)
+  anyUriType:
+    uri: xsd:anyURI
+    base: uri
+
 
 enums:
-  PersonStatus:
+  Operations:
     permissible_values:
-      ALIVE:
-        description: the person is living
-        meaning: PATO:0001421
-      DEAD:
-        description: the person is deceased
-        meaning: PATO:0001422
-      UNKNOWN:
-        description: the vital status is not known
-        todos:
-          - map this to an ontology
+      readproperty:
+        description: Identifies the read operation on Property Affordances to retrieve the corresponding data.
+        meaning: td:readProperty
+      writeproperty:
+        description: Identifies the write operation on Property Affordances to update the corresponding data.
+        meaning: td:writeProperty
+      observeproperty:
+        description: Identifies the observe operation on Property Affordances to be notified with the new data when the Property is updated.
+        meaning: td:observeProperty
+      unobserveproperty:
+        description: Identifies the unobserve operation on Property Affordances to stop the corresponding notifications.
+        meaning: td:unobserveProperty
+      invokeaction:
+        description: Identifies the invoke operation on Action Affordances to perform the corresponding action.
+        meaning: td:invokeAction
+      queryaction:
+        description: Identifies the querying operation on Action Affordances to get the status of the corresponding action.
+        meaning: td:queryAction
+      cancelaction:
+        description: Identifies the cancel operation on Action Affordances to cancel the ongoing corresponding action.
+        meaning: td:cancelAction
+      subscribeevent:
+        description: Identifies the subscribe operation on Event Affordances to be notified by the Thing when the event occurs.
+        meaning: td:subscribeEvent
+      unsubscribeevent:
+        description: Identifies the unsubscribe operation on Event Affordances to stop the corresponding notifications.
+        meaning: todo
+      readallproperties:
+        description: Identifies the readallproperties operation on a Thing to retrieve the data of all Properties in a single interaction.
+        meaning: todo
+      writeallproperties:
+        description: Identifies the writeallproperties operation on a Thing to update the data of all writable Properties in a single interaction.
+        meaning: todo
+      readmultipleproperties:
+        description: Identifies the readmultipleproperties operation on a Thing to retrieve the data of selected Properties in a single interaction.
+        meaning: todo
+      writemultipleproperties:
+        description: Identifies the writemultipleproperties operation on a Thing to update the data of selected writable Properties in a single interaction.
+        meaning: todo
+      observeallproperties:
+        description: Identifies the observeallproperties operation on Properties to be notified with new data when any Property is updated.
+        meaning: td:observeAllProperties
+      unobserveallproperties:
+        description: Identifies the unobserveallproperties operation on Properties to stop notifications from all Properties in a single interaction.
+        meaning: td:unobserveAllProperties
+      subscribeallevents:
+        description: Identifies the subscribeallevents operation on Events to subscribe to notifications from all Events in a single interaction.
+        meaning: todo
+      unsubscribeallevents:
+        description: Identifies the unsubscribeallevents operation on Events to unsubscribe from notifications from all Events in a single interaction.
+        meaning: todo
+      queryallactions:
+        description: Identifies the queryallactions operation on a Thing to get the status of all Actions in a single interaction.
+        meaning: td:queryAllActions
+  SecurityMechanism:
+    permissible_values:
+      nosec:
+        description: A security configuration corresponding to identified by the Vocabulary Term nosec, indicating there is no authentication or other mechanism required to access the resource.
+        meaning: todo
+      combo:
+        description: Elements of this scheme define various ways in which other named schemes defined in securityDefinitions, including other ComboSecurityScheme definitions, are to be combined to create a new scheme definition.
+        meaning: todo
+      basic:
+        description: Uses an unencrypted username and password.
+        meaning: todo
+      digest:
+        description: This scheme is similar to basic authentication but with added features to avoid man-in-the-middle attacks.
+        meaning: todo
+      bearer:
+        description: Bearer tokens are used independently of OAuth2.
+        meaning: todo
+      psk:
+        description: This is meant to identify that a standard is used for pre-shared keys such as TLS-PSK [RFC4279], and that the ciphersuite used for keys will be established during protocol negotiation.
+        meaning: todo
+      oauth2:
+        description: OAuth 2.0 authentication security configuration for systems conformant with [RFC6749] and [RFC8252].
+        meaning: todo
+      apikey:
+        description: This scheme is to be used when the access token is opaque.
+        meaning: todo
+      auto:
+        description: This scheme indicates that the security parameters are going to be negotiated by the underlying protocols at runtime
+        meaning: todo
+
