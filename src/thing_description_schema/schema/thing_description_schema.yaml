@@ -1,5 +1,5 @@
 ---
-id: https://www.w3.org/2019/wot/td
+id: td
 name: thing-description-schema
 title: thing-description-schema
 description: |-
@@ -15,10 +15,21 @@ prefixes:
   td:
     prefix_prefix: td
     prefix_reference: https://www.w3.org/2019/wot/td#
-  jsonschema: https://www.w3.org/2019/wot/json-schema#
-  wotsec: https://www.w3.org/2019/wot/security#
-  hctl: https://www.w3.org/2019/wot/hypermedia#
-  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  jsonschema:
+    prefix_prefix: jsonschema
+    prefix_reference: https://www.w3.org/2019/wot/json-schema#
+  wotsec:
+    prefix_prefix: wotsec
+    prefix_reference: https://www.w3.org/2019/wot/security#
+  hctl:
+    prefix_prefix: hctl
+    prefix_reference: https://www.w3.org/2019/wot/hypermedia#
+  rdfs:
+    prefix_prefix: rdfs
+    prefix_reference: http://www.w3.org/2000/01/rdf-schema#
+  rdf:
+    prefix_prefix: rdf
+    prefix_reference: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   xsd: http://www.w3.org/2001/XMLSchema#
   dct: http://purl.org/dc/terms/
   htv: http://www.w3.org/2011/http#
@@ -28,6 +39,42 @@ default_range: string
 
 imports:
   - linkml:types
+
+types:
+  langStringType:
+    name: langStringType
+    description: an rdf langstring or a string without the language tag
+    uri: rdf:langString
+    base: string
+    pattern: ?:[a-zA-Z]+|"[^"]+"@[a-zA-Z]+(?:-[a-zA-Z]+)*)
+  anyUri:
+    name: anyUri
+    description: a complete URI
+    uri: xsd:anyURI
+    base: URI
+
+slots:
+  id:
+    identifier: true
+    description: something
+    range: anyUri
+  title:
+    description: >-
+      Provides a human-readable title (e.g., display a text for UI representation) based on a default language.
+    range: MultiLanguage
+    required:
+  description:
+    range: MultiLanguage
+  titles:
+    multivalued: true
+    range: MultiLanguage
+    inlined: true
+  descriptions:
+    multivalued: true
+    range: MultiLanguage
+    inlined: true
+  "@type":
+    multivalued: true
 
 classes:
 
@@ -96,7 +143,7 @@ classes:
     attributes:
       description:
       proxy:
-        range: anyUriType
+        range: anyUri
       scheme:
         required: true
         range: SecurityMechanism
@@ -153,32 +200,24 @@ classes:
     description: >-
       An abstraction of a physical or a virtual entity whose metadata and interfaces are described by a WoT Thing
       Description, whereas a virtual entity is the composition of one or more Things.
+    class_uri: td:Thing
     attributes:
-      title:
-        description: >-
-          Provides a human-readable title (e.g., display a text for UI representation) based on a default language.
-        range: langStringType
-        required:
       security:
         required:
         multivalued: true
         any_of:
           - range: string
           - range: SecurityMechanism
-      description:
-        description:
-          Provides a human-readable title (e.g., display a text for UI representation) based on a default language.
-        range: langStringType
       profile:
         multivalued: true
-        range: anyUriType
+        range: anyUri
       created:
         range: datetime
       modified:
         range: datetime
       support:
       base:
-        range: anyUriType
+        range: anyUri
       version:
         range: VersionInfo
       forms:
@@ -210,35 +249,11 @@ classes:
         range: EventAffordance
     slots:
       - id
+      - title
+      - description
       - titles
       - descriptions
       - "@type"
-
-
-slots:
-  id:
-    identifier: true
-    range: uri
-  titles:
-    multivalued: true
-    range: MultiLanguage
-    inlined: true
-  descriptions:
-    multivalued: true
-    range: MultiLanguage
-    inlined: true
-  "@type":
-    multivalued: true
-
-
-types:
-  langStringType:
-    uri: rdf:langString
-    base: string
-    pattern: ?:[a-zA-Z]+|"[^"]+"@[a-zA-Z]+(?:-[a-zA-Z]+)*)
-  anyUriType:
-    uri: xsd:anyURI
-    base: uri
 
 
 enums:
