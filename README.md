@@ -1,7 +1,8 @@
 # thing-description-schema
 
-The thing-description-schema is a LinkML-based schema for modelling the Web of Things Thing Description (https://www.w3.org/TR/wot-thing-description11/) information model. 
+The thing-description-schema is a LinkML-based schema for modelling the Web of Things Thing Description[https://www.w3.org/TR/wot-thing-description11/] information model. 
 The aim is simplify the current WoT specification generation process.
+For more information please refer to the WoT github repo[https://github.com/w3c/wot-thing-description/tree/main/toolchain].
 
 ## Repository Structure
 
