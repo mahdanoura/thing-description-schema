@@ -30,7 +30,15 @@ prefixes:
   rdf:
     prefix_prefix: rdf
     prefix_reference: http://www.w3.org/1999/02/22-rdf-syntax-ns#
-  xsd: http://www.w3.org/2001/XMLSchema#
+  dcterms:
+    prefix_prefix: dcterms
+    prefix_reference: http://purl.org/dc/terms/
+  schema:
+    prefix_prefix: schema
+    prefix_reference: http://schema.org/
+  xsd:
+    prefix_prefix: xsd
+    prefix_reference: http://www.w3.org/2001/XMLSchema#
   dct: http://purl.org/dc/terms/
   htv: http://www.w3.org/2011/http#
   tm: https://www.w3.org/2019/wot/tm#
@@ -58,11 +66,13 @@ slots:
     identifier: true
     description: something
     range: anyUri
+    from_schema: td
   title:
     description: >-
       Provides a human-readable title (e.g., display a text for UI representation) based on a default language.
     range: MultiLanguage
     required:
+    from_schema: td
   description:
     range: MultiLanguage
   titles:
@@ -79,8 +89,9 @@ slots:
 classes:
 
   VersionInfo:
-    description:
-
+    class_uri: schema:version
+    description: >-
+      Provides version information.
     attributes:
       instance:
         required: true
@@ -154,8 +165,6 @@ classes:
     attributes:
       key:
         identifier: true
-      title:
-      description:
       uriVariables:
         multivalued: true
         range: DataSchema
@@ -166,9 +175,14 @@ classes:
     slots:
       - titles
       - descriptions
+      - title
+      - description
 
   PropertyAffordance:
     is_a: InteractionAffordance
+    class_uri: td:hasPropertyAffordance
+    description:
+      All Property-based interaction affordances of the Thing.
     mixins: DataSchema
     attributes:
       observable:
@@ -176,6 +190,9 @@ classes:
 
   ActionAffordance:
     is_a: InteractionAffordance
+    class_uri: td:hasActionAffordance
+    description:
+      All Action-based interaction affordances of the Thing.
     attributes:
       safe:
         range: boolean
@@ -188,6 +205,9 @@ classes:
 
   EventAffordance:
     is_a: InteractionAffordance
+    class_uri: td:hasEventAffordance
+    description:
+      All Event-based interaction affordances of the Thing.
     attributes:
       data:
         range: DataSchema
@@ -212,11 +232,23 @@ classes:
         multivalued: true
         range: anyUri
       created:
+        from_schema: dcterms
+        description:
+          Provides information when the TD instance was created.
         range: datetime
       modified:
+        from_schema: dcterms
+        description:
+          Provides information when the TD instance was last modified.
         range: datetime
-      support:
+      supportContact:
+        description:
+          Provides information about the TD maintainer as URI scheme (e.g., <code>mailto</code> [[RFC6068]],<code>tel</code> [[RFC3966]],<code>https</code> [[RFC9112]]).
+        range: anyUri
+        from_schema: schema:contactPoint
       base:
+        description:
+          Define the base URI that is used for all relative URI references throughout a TD document.
         range: anyUri
       version:
         range: VersionInfo
