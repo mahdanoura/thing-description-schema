@@ -6,9 +6,9 @@
     "cookiecutter": {
       "project_name": "thing-description-schema",
       "__project_slug": "thing_description_schema",
-      "github_org": "mahda",
+      "github_org": "mahdanoura",
       "__source_path": "src/thing_description_schema/schema/thing_description_schema.yaml",
-      "project_description": "Thing Description Standard",
+      "project_description": "Thing Description Information Model as LinkML schema",
       "full_name": "Mahda Noura",
       "email": "mahdanoura@gmail.com",
       "__author": "Mahda Noura <mahdanoura@gmail.com>",
