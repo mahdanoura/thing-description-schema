@@ -140,14 +140,29 @@ classes:
       - target
 
   ExpectedResponse:
+    class_uri: hctl:ExpectedResponse
+    description: >-
+      Communication metadata describing the expected response message for the primary response.
     attributes:
       contentType:
+        description: >-
+          TODO Check, was not in hctl ontology, if not could be source of discrepancy
         required: true
 
   AdditionalExpectedResponse:
+    class_uri: hctl:AdditionalExpectedResponse
+    description: >-
+      Communication metadata describing the expected response message for additional responses.
     is_a: ExpectedResponse
     attributes:
+      additionalOutputSchema:
+        description: >-
+          This optional term can be used to define a data schema for an additional response if it differs from the default
+          output data schema. Rather than a DataSchema object, the name of a previous definition given in a SchemaDefinitions
+          map must be used.
       success:
+        description: >-
+          Signals if the additional response should not be considered an error.
         range: boolean
       schema:
 
@@ -161,7 +176,7 @@ classes:
     attributes:
       href:
         required: true
-        range: uri
+        range: anyUri
       contentType:
         from_schema: hctl
         description: >-
@@ -175,7 +190,11 @@ classes:
           coding include \"gzip\", \"deflate\", etc.
         from_schema: hctl
       security:
+        description: >- 
+          TODO Check, was not in hctl ontology, if not could be source of discrepancy
       scopes:
+        description: >-
+          TODO Check, was not in hctl ontology, if not could be source of discrepancy
       returns:
         description: >-
           This optional term can be used if, e.g., the output communication metadata differ from input metadata (e.g., output contentType differ from the
