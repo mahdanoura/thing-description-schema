@@ -385,9 +385,6 @@ classes:
       schemaDefinitions:
         multivalued: true
         range: DataSchema
-      uriVariables:
-        multivalued: true
-        range: DataSchema
       properties:
         description: >-
           All Property-based interaction affordances of the Thing.
