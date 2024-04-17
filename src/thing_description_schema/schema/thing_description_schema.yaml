@@ -165,6 +165,9 @@ classes:
           Signals if the additional response should not be considered an error.
         range: boolean
       schema:
+        description: >-
+          TODO Check, was not in hctl ontology, if not could be source of discrepancy
+  
 
   Form:
     class_uri: hctl:Form
@@ -213,12 +216,12 @@ classes:
         description: >-
           Indicates the exact mechanism by which an interaction will be accomplished for a given protocol when there
           are multiple options.
-      operation:
+      operationType:
         description:
           Indicates the semantic intention of performing the operation(s) described by the form.
         from_schema: hctl
         multivalued: true
-        range: Operations
+        range: OperationTypes
     slots:
       - target
 
@@ -376,7 +379,9 @@ classes:
 
 
 enums:
-  Operations:
+  OperationTypes:
+    description: >-
+      Enumerations of well-known operation types necessary to implement the WoT interaction model.
     permissible_values:
       readproperty:
         description: Identifies the read operation on Property Affordances to retrieve the corresponding data.
@@ -404,19 +409,19 @@ enums:
         meaning: td:subscribeEvent
       unsubscribeevent:
         description: Identifies the unsubscribe operation on Event Affordances to stop the corresponding notifications.
-        meaning: todo
+        meaning: td:unsubscribeEvent
       readallproperties:
         description: Identifies the readallproperties operation on a Thing to retrieve the data of all Properties in a single interaction.
-        meaning: todo
+        meaning: td:readAllProperties
       writeallproperties:
         description: Identifies the writeallproperties operation on a Thing to update the data of all writable Properties in a single interaction.
-        meaning: todo
+        meaning: writeAllProperties
       readmultipleproperties:
         description: Identifies the readmultipleproperties operation on a Thing to retrieve the data of selected Properties in a single interaction.
-        meaning: todo
+        meaning: td:readMultipleProperties
       writemultipleproperties:
         description: Identifies the writemultipleproperties operation on a Thing to update the data of selected writable Properties in a single interaction.
-        meaning: todo
+        meaning: td:writeMultipleProperties
       observeallproperties:
         description: Identifies the observeallproperties operation on Properties to be notified with new data when any Property is updated.
         meaning: td:observeAllProperties
@@ -425,10 +430,10 @@ enums:
         meaning: td:unobserveAllProperties
       subscribeallevents:
         description: Identifies the subscribeallevents operation on Events to subscribe to notifications from all Events in a single interaction.
-        meaning: todo
+        meaning: td:subscribeAllEvents
       unsubscribeallevents:
         description: Identifies the unsubscribeallevents operation on Events to unsubscribe from notifications from all Events in a single interaction.
-        meaning: todo
+        meaning: td:unsubscribeAllEvents
       queryallactions:
         description: Identifies the queryallactions operation on a Thing to get the status of all Actions in a single interaction.
         meaning: td:queryAllActions
