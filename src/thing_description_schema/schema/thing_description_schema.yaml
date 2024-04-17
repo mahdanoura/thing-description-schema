@@ -291,40 +291,80 @@ classes:
 
   PropertyAffordance:
     is_a: InteractionAffordance
-    class_uri: td:hasPropertyAffordance
+    class_uri: td:PropertyAffordance
     description: >-
-      All Property-based interaction affordances of the Thing.
+      An Interaction Affordance that exposes state of the Thing. This state can be retrieved (read) and/or updated.
     mixins: DataSchema
     attributes:
       observable:
+        description: >-
+          A hint that indicates whether Servients hosting the Thing and Intermediaries should probide a Protocol Binding 
+          that supports the observeproperty and unobserveproperty operations for this Property.
         range: boolean
 
   ActionAffordance:
     is_a: InteractionAffordance
-    class_uri: td:hasActionAffordance
+    class_uri: td:ActionAffordance
     description: >-
-      All Action-based interaction affordances of the Thing.
+      An Interaction Affordance that allows to invoke a function of the Thing, which manipulates state (e.g., toggling a lamp
+      on or off) or triggers a process on the Thing (e.g., dim a lamp over time).
     attributes:
       safe:
+        description: >-
+          Signals if the action is safe (=true) or not. Used to signal if there is no internal state (cf. resource state)
+          is changed when invoking an Action.
+        from_schema: td:isSafe
+        range: boolean
+      synchronous:
+        description: >-
+          Indicates whether the action is synchronous (=true) or not. A synchronous action means that the response of action
+          contains all the information about the result of the action and no further querying about the status of the action
+          is needed. Lack of this keyword means that no claim on the synchronicity of the action can be made.
+        from_schema: td:isSynchronous
         range: boolean
       idempotent:
+        description: >-
+          Indicates whether the action is idempotent (=true) or not. Informs whether the action can be called repeatedly with the same
+          results, if present, based on the same input.
+        from_schema: td:isIdempotent
         range: boolean
       input:
+        description: >-
+          Used to define the input data schema of the action.
+        from_schema: td:hasInputSchema
         range: DataSchema
       output:
+        description: >-
+          Used to define the output data schema of the action.
+        from_schema: td:hasOutputSchema
         range: DataSchema
 
   EventAffordance:
     is_a: InteractionAffordance
-    class_uri: td:hasEventAffordance
+    class_uri: td:EventAffordance
     description: >-
-      All Event-based interaction affordances of the Thing.
+      An Interaction Affordance that describes an event source, which asynchronously pushes event data to Consumers
+      (e.g., overhearing alerts).
     attributes:
-      data:
-        range: DataSchema
       subscription:
+        description: >-
+          Defines data that needs to be passed upon subscription, e.g., filters or message format for setting up Webhooks.
+        from_schema: td:hasSubscriptionSchema
         range: DataSchema
       cancellation:
+        description: >-
+          Defines any data that needs to be passed to cancel a subscription, e.g., a specific message to remove a Webhook.
+        from_schema: td:hasCancellationSchema
+        range: DataSchema
+      notification:
+        description: >-
+          Defines the data schema of the Event instance messages pushed by the Thing.
+        from_schema: td:hasNotificationSchema
+        range: DataSchema
+      notificationResponse:
+        description: >-
+          Defines the data schema of the Event response messages sent by the consumer in a response to a data message.
+        from_schema: td:hasNotificationResponseSchema
         range: DataSchema
 
   Thing:
