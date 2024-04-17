@@ -9,7 +9,6 @@ in a pull request.
 
 ## Table Of Contents
 
-* [Code of Conduct](#code-of-conduct)
 * [Guidelines for Contributions and Requests](#contributions)
   * [Reporting issues and making requests](#reporting-issues)
   * [Questions and Discussion](#questions-and-discussion)
@@ -18,13 +17,6 @@ in a pull request.
   * [How to write a great issue](#great-issues)
   * [How to create a great pull/merge request](#great-pulls)
 
-<a id="code-of-conduct"></a>
-
-## Code of Conduct
-
-The thing-description-schema team strives to create a
-welcoming environment for editors, users and other contributors.
-Please carefully read our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 <a id="contributions"></a>
 
@@ -118,4 +110,3 @@ Core developers should read the material on the [LinkML site](https://linkml.io/
 [issues]: https://github.com/mahda/thing-description-schema/issues/
 [pulls]: https://github.com/mahda/thing-description-schema/pulls/
 
-We recommend also reading [GitHub Pull Requests: 10 Tips to Know](https://blog.mergify.com/github-pull-requests-10-tips-to-know/)
