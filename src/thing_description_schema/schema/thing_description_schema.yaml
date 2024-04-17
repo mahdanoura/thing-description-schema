@@ -3,7 +3,8 @@ id: td
 name: thing-description-schema
 title: thing-description-schema
 description: |-
-  LinkML schema for modelling the Web of Things Thing Description information model
+  LinkML schema for modelling the Web of Things Thing Description information model. This schema is used to generate
+  JSON Schema, SHACL shapes, and RDF.
 license: MIT
 see_also:
   - https://www.w3.org/TR/wot-thing-description11/
@@ -64,15 +65,15 @@ types:
 slots:
   id:
     identifier: true
-    description: something
+    description: TODO
     range: anyUri
-    from_schema: td
+    slot_uri: td:id
   title:
     description: >-
       Provides a human-readable title (e.g., display a text for UI representation) based on a default language.
     range: MultiLanguage
     required:
-    from_schema: td
+    slot_uri: td:title
   description:
     range: MultiLanguage
   titles:
@@ -100,7 +101,7 @@ slots:
   target:
     description: >-
       Target IRI of a link or submission target of a Form
-    from_schema: hctl
+    slot_uri: hctl:target
     required: true
     range: anyUri
 
@@ -204,7 +205,7 @@ classes:
           without losing the identity of its underlying media type and without loss of information. Examples of content
           coding include \"gzip\", \"deflate\", etc.
         from_schema: hctl
-      securityConfiguration:
+      securityDefinitions:
         description: >-
           A security schema applied to a (set of) affordance(s).
         from_schema: td:hasSecurityConfiguration
@@ -245,18 +246,34 @@ classes:
     attributes:
       description:
       proxy:
+        description: >-
+          URI of the proxy server this security configuration provides access to. If not given, the corresponding security configuration
+          is for the endpoint.
         range: anyUri
       scheme:
         required: true
-        range: SecurityMechanism
+        range: SecuritySchemeType
 
   DataSchema:
     class_uri: jsonschema:DataSchema
+    description: >-
+      Metadata that describes the data format used. It can be used for validation.
+    attributes:
+      propertyName:
+        description: >-
+          Used to store the indexing name in the parent object when this schema appears as a property of an object schema.
+      writeOnly:
+        description: >-
+          Boolean value that is a hint to indicate whether a property interaction/value is write only (=true) or not (=false).
+      readonly:
+        description: >-
+          Boolean value that is a hint to indicate whether a property interaction/value is read only (=true) or not (=false).
     slots:
       - description
       - title
       - titleInLanguage
       - descriptionInLanguage
+
 
   InteractionAffordance:
     description: >-
@@ -373,18 +390,35 @@ classes:
       Description, whereas a virtual entity is the composition of one or more Things.
     class_uri: td:Thing
     attributes:
-      securityConfiguration:
+      securityDefinitions:
         description: >- 
-          A security scheme applied to a (set of) affordance(s).
+          A security scheme applied to a (set of) affordance(s). TODO check
         from_schema: td:hasSecurityConfiguration
         required:
         multivalued: true
         any_of:
           - range: string
-          - range: SecurityMechanism
+          - range: SecuritySchemeType
+      security:
+        description: >-
+          A Thing may define abstract security schemes, used to configure the secure access of (a set of) affordance(s).
+          TODO: check
+        from_schema: td:definesSecurityScheme
+        required:
+        multivalued: true
+      schemaDefinitions:
+        description: TODO CHECK
+        multivalued: true
+        range: DataSchema
       profile:
+        description: >-
+          Indicates the WoT Profile mechanisms followed by this Thing Description and the corresponding Thing implementation.
+        from_schema: td:followsProfile
         multivalued: true
         range: anyUri
+      instance:
+        description: >-
+          Provides a version identicator of this TD instance.
       created:
         from_schema: dcterms
         description: >-
@@ -403,6 +437,7 @@ classes:
       base:
         description: >-
           Define the base URI that is used for all relative URI references throughout a TD document.
+        from_schema: td:baseURI
         range: anyUri
       version:
         range: VersionInfo
@@ -415,16 +450,10 @@ classes:
         range: Form
       links:
         from_schema: td:hasLink
-        description:
+        description: >-
           Provides Web links to arbitrary resources that relate to the specified Thing Description.
         multivalued: true
         range: Link
-      securityDefinitions:
-        required:
-        multivalued: true
-      schemaDefinitions:
-        multivalued: true
-        range: DataSchema
       properties:
         description: >-
           All Property-based interaction affordances of the Thing.
@@ -516,33 +545,33 @@ enums:
       queryallactions:
         description: Identifies the queryallactions operation on a Thing to get the status of all Actions in a single interaction.
         meaning: td:queryAllActions
-  SecurityMechanism:
+  SecuritySchemeType:
     permissible_values:
       nosec:
         description: A security configuration corresponding to identified by the Vocabulary Term nosec, indicating there is no authentication or other mechanism required to access the resource.
-        meaning: todo
+        meaning: wotsec:NoSecurityScheme
       combo:
         description: Elements of this scheme define various ways in which other named schemes defined in securityDefinitions, including other ComboSecurityScheme definitions, are to be combined to create a new scheme definition.
-        meaning: todo
+        meaning: wotsec:ComboSecurityScheme
       basic:
         description: Uses an unencrypted username and password.
-        meaning: todo
+        meaning: wotsec:BasicSecurityScheme
       digest:
         description: This scheme is similar to basic authentication but with added features to avoid man-in-the-middle attacks.
-        meaning: todo
+        meaning: wotsec:DigestSecurityScheme
       bearer:
         description: Bearer tokens are used independently of OAuth2.
-        meaning: todo
+        meaning: wotsec:BearerSecurityScheme
       psk:
         description: This is meant to identify that a standard is used for pre-shared keys such as TLS-PSK [RFC4279], and that the ciphersuite used for keys will be established during protocol negotiation.
-        meaning: todo
+        meaning: wotsec:PSKSecurityScheme
       oauth2:
         description: OAuth 2.0 authentication security configuration for systems conformant with [RFC6749] and [RFC8252].
-        meaning: todo
+        meaning: wotsec:OAuth2SecurityScheme
       apikey:
         description: This scheme is to be used when the access token is opaque.
-        meaning: todo
+        meaning: wotsec:APIKeySecurityScheme
       auto:
         description: This scheme indicates that the security parameters are going to be negotiated by the underlying protocols at runtime
-        meaning: todo
+        meaning: wotsec:AutoSecurityScheme
 
