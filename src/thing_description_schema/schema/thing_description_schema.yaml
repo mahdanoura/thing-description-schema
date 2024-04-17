@@ -80,9 +80,21 @@ slots:
     range: MultiLanguage
     inlined: true
   descriptions:
+    description: >- 
+      TODO, check, according to the description a description should not contain a lang tag.
     multivalued: true
     range: MultiLanguage
     inlined: true
+  descriptionInLanguage:
+    description: >-
+      description of the TD element (Thing, interaction affordance, security scheme or data scheme) with language tag. By
+      convention, a language tag must be added to the object of descriptionInLanguage. Otherwise use description.
+    range: MultiLanguage
+  titleInLanguage:
+    description: >-
+      title of the TD element (Thing, interaction affordance, security scheme or data scheme) with language tag. By
+      convention, a language tag must be added to the object of descriptionInLanguage. Otherwise use description.
+    range: MultiLanguage
   "@type":
     multivalued: true
   target:
@@ -192,9 +204,10 @@ classes:
           without losing the identity of its underlying media type and without loss of information. Examples of content
           coding include \"gzip\", \"deflate\", etc.
         from_schema: hctl
-      security:
-        description: >- 
-          TODO Check, was not in hctl ontology, if not could be source of discrepancy
+      securityConfiguration:
+        description: >-
+          A security schema applied to a (set of) affordance(s).
+        from_schema: td:hasSecurityConfiguration
       scopes:
         description: >-
           TODO Check, was not in hctl ontology, if not could be source of discrepancy
@@ -238,15 +251,33 @@ classes:
         range: SecurityMechanism
 
   DataSchema:
+    class_uri: jsonschema:DataSchema
+    slots:
+      - description
+      - title
+      - titleInLanguage
+      - descriptionInLanguage
 
   InteractionAffordance:
+    description: >-
+      TOOD
+    class_uri: td:InteractionAffordance
     attributes:
-      key:
+      name:
+        description: >-
+          Indexing property to store entity names when serializing them in a JSON-LD @index container.
         identifier: true
       uriVariables:
+        description: >-
+          Define URI template variables according to RFC6570 as collection based on schema specifications. The individual
+          variables DataSchema cannot be an ObjectSchema or an ArraySchema. TODO: range is not obvious from the ontology.
+        from_schema: td:hasUriTemplateSchema
         multivalued: true
         range: DataSchema
       forms:
+        from_schema: td:hasForm
+        description: >-
+          Set of form hypermedia controls that describe how an operation can be performed.
         required:
         multivalued: true
         range: Form
@@ -255,6 +286,8 @@ classes:
       - descriptions
       - title
       - description
+      - titleInLanguage
+      - descriptionInLanguage
 
   PropertyAffordance:
     is_a: InteractionAffordance
@@ -300,7 +333,10 @@ classes:
       Description, whereas a virtual entity is the composition of one or more Things.
     class_uri: td:Thing
     attributes:
-      security:
+      securityConfiguration:
+        description: >- 
+          A security scheme applied to a (set of) affordance(s).
+        from_schema: td:hasSecurityConfiguration
         required:
         multivalued: true
         any_of:
@@ -331,6 +367,10 @@ classes:
       version:
         range: VersionInfo
       forms:
+        from_schema: td:hasForm
+        description: >-
+          Set of form hypermedia controls that describe how an operation can be performed. Forms are serializations of
+          Protocol Bindings.
         multivalued: true
         range: Form
       links:
@@ -376,6 +416,8 @@ classes:
       - titles
       - descriptions
       - "@type"
+      - titleInLanguage
+      - descriptionInLanguage
 
 
 enums:
