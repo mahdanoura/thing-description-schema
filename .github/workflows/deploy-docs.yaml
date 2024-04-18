@@ -2,7 +2,7 @@
 name: Auto-deployment of thing_description_schema Documentation
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build-docs:
