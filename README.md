@@ -1,3 +1,5 @@
+This repository is not maintained anymore and has moved to a [W3C repo](https://github.com/w3c/wot-thing-description-toolchain-tmp).
+
 # thing-description-schema
 
 The thing-description-schema is a LinkML-based schema for modelling the [Web of Things Thing Description](https://www.w3.org/TR/wot-thing-description11/) information model. 
